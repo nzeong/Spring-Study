@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig { // 구체적인 객체를 주입한다
 
+    // @Bean memberService -> new MemoryMemberRepository() 호출
+    // @Bean memberOrderService -> new MemoryMemberRepository() 호출
+
     @Bean
     public MemberService memberService(){
         return new MemberServiceImpl(memberRepository());
