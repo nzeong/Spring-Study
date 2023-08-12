@@ -20,8 +20,8 @@ class StatefulServiceTest {
         //ThreadA : B 사용자 20000원 주문
         statefulService1.order("userB", 20000);
 
-        int price = statefulService1.getPrice(); // => 20000 이 나와버린다
-        System.out.println("price = " + price);
+//        int price = statefulService1.getPrice(); // => 20000 이 나와버린다
+//        System.out.println("price = " + price);
     }
 
     static class TestConfig{
