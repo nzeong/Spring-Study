@@ -6,20 +6,16 @@ import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
 import hello.core.member.MemoryMemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor // final 붙은 것 가지고 생성자 만들어줌, 롬복
 public class OrderServiceImpl implements OrderService{
 
-    private final MemberRepository memberRepository; // 회원 repo 불러오기
+    private final MemberRepository memberRepository;
     private final DiscountPolicy discountPolicy;
-
-    @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    } // 생성자 이용하여 -> 인터페이스에만 의존 중
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {

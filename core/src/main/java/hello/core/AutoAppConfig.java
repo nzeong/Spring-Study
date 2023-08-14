@@ -1,8 +1,10 @@
 package hello.core;
 
+import lombok.Getter;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+
 
 @Configuration
 @ComponentScan( // 컴포넌트 스캔 사용
