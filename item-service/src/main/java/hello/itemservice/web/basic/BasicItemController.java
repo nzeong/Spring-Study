@@ -7,9 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -37,6 +36,79 @@ public class BasicItemController {
         Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
         return "basic/item";
+    }
+
+    @GetMapping("/add") //상품을 새로 등록하는 경우 view만 호출(해당 url로 get 요청일 때), 기본 렌더링은 get으로 하는 듯
+    public String addForm(){
+        return "basic/addForm";
+    }
+//    @PostMapping("/add") //상품을 수정하는 경우(근데 url은 같음)
+    public String addItemV1(@RequestParam String itemName,
+                       @RequestParam int price,
+                       @RequestParam Integer quantity,
+                       Model model){
+
+        Item item = new Item();
+        item.setItemName(itemName);
+        item.setPrice(price);
+        item.setQuantity(quantity);
+
+        itemRepository.save(item);
+
+        model.addAttribute("item", item);
+
+        return "basic/item";
+    }
+
+//    @PostMapping("/add") //상품을 수정하는 경우(근데 url은 같음)
+    public String addItemV2(@ModelAttribute Item item, Model model){
+
+        itemRepository.save(item);
+//        model.addAttribute("item", item); 자동 추가 되기에 생략 가능!
+//@ModelAttribute("html 넘겨지는 이름") Item item
+        return "basic/item";
+    }
+
+//    @PostMapping("/add") //상품을 수정하는 경우(근데 url은 같음)
+    public String addItemV3(@ModelAttribute("item") Item item, Model model){
+
+        itemRepository.save(item);
+//        model.addAttribute("item", item); 자동 추가 되기에 생략 가능!
+//@ModelAttribute("html 넘겨지는 이름") Item item
+        return "basic/item";
+    }
+
+//    @PostMapping("/add") //상품을 수정하는 경우(근데 url은 같음)
+    public String addItemV4(Item item){
+        itemRepository.save(item);
+        return "basic/item";
+    }
+
+//    @PostMapping("/add") //상품을 수정하는 경우(근데 url은 같음)
+    public String addItemV5(Item item){
+        itemRepository.save(item);
+        return "redirect:/basic/items/" + item.getId();
+    }
+
+    @PostMapping("/add") //상품을 수정하는 경우(근데 url은 같음)
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes){
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/basic/items/{itemId}";
+    }
+
+    @GetMapping("/{itemId}/edit")
+    public String editForm(@PathVariable Long itemId, Model model){
+        Item item = itemRepository.findById(itemId);
+        model.addAttribute("item", item);
+        return "basic/editForm";
+    }
+
+    @PostMapping ("/{itemId}/edit")
+    public String edit(@PathVariable Long itemId, @ModelAttribute Item item){
+        itemRepository.update(itemId, item);
+        return "redirect:/basic/items/{itemId}";
     }
 
     @PostConstruct // 실행 전 test 용 데이터
